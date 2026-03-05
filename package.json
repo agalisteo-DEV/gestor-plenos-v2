@@ -1,0 +1,17 @@
+{
+  "name": "gestor-plenos-v2",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm --prefix web install && npm --prefix mobile install && npm --prefix functions install",
+    "start": "npm --prefix web start",
+    "start:mobile": "npm --prefix mobile start",
+    "build:web": "npm --prefix web run build",
+    "build:mobile": "npm --prefix mobile run build",
+    "serve:functions": "npm --prefix functions run serve",
+    "dev": "concurrently -n WEB,FN \"npm --prefix web start\" \"npm --prefix functions run serve\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

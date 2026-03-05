@@ -1,0 +1,45 @@
+<div class="min-h-screen bg-slate-100 flex">
+  <aside [ngClass]="mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'" class="fixed md:static z-20 w-72 bg-slate-900 text-slate-100 min-h-screen p-4 transition-transform">
+    <h2 class="text-xl font-bold">Ayuntamiento</h2>
+    <p class="text-slate-300 mb-4">Torrejón de Velasco</p>
+    <nav class="space-y-2 text-sm">
+      <a routerLink="/app/plenos" class="block p-2 rounded hover:bg-slate-800">Plenos</a>
+      <p class="text-xs uppercase text-orange-300 mt-4">Control del pleno seleccionado</p>
+      @if (ctx.activePleno$ | async; as active) {
+        <a [routerLink]="['/app/plenos', active.id]" class="block p-2 hover:bg-slate-800 rounded">Vista general</a>
+        <a [routerLink]="['/app/plenos', active.id, 'documentos']" class="block p-2 hover:bg-slate-800 rounded">Documentos</a>
+        <a [routerLink]="['/app/plenos', active.id, 'agenda']" class="block p-2 hover:bg-slate-800 rounded">Orden del día</a>
+        <a [routerLink]="['/app/plenos', active.id, 'asistentes']" class="block p-2 hover:bg-slate-800 rounded">Asistentes</a>
+        <a [routerLink]="['/app/plenos', active.id, 'video']" class="block p-2 hover:bg-slate-800 rounded">Video</a>
+        <a [routerLink]="['/app/plenos', active.id, 'autocues']" class="block p-2 hover:bg-slate-800 rounded">Autocues</a>
+        <a [routerLink]="['/app/plenos', active.id, 'transcripcion']" class="block p-2 hover:bg-slate-800 rounded">Transcripción</a>
+        <a [routerLink]="['/app/plenos', active.id, 'acta']" class="block p-2 hover:bg-slate-800 rounded">Acta</a>
+        <a [routerLink]="['/plenos', active.slug]" class="block p-2 hover:bg-slate-800 rounded">Ver publicación</a>
+      } @else {
+        <p class="p-2 bg-slate-800 rounded text-slate-300">Selecciona un pleno</p>
+      }
+      <p class="text-xs uppercase text-emerald-300 mt-4">Configuración</p>
+      <a routerLink="/app/config/ayuntamiento" class="block p-2 hover:bg-slate-800 rounded">Ayuntamiento</a>
+      <a routerLink="/app/config/usuarios" class="block p-2 hover:bg-slate-800 rounded">Usuarios</a>
+      <a routerLink="/app/config/corporacion" class="block p-2 hover:bg-slate-800 rounded">Corporación</a>
+      <a routerLink="/app/config/partidos" class="block p-2 hover:bg-slate-800 rounded">Partidos</a>
+      <a routerLink="/app/config/canales" class="block p-2 hover:bg-slate-800 rounded">Canales</a>
+      <a routerLink="/app/config/media" class="block p-2 hover:bg-slate-800 rounded">Media</a>
+      <a routerLink="/app/config/manuales" class="block p-2 hover:bg-slate-800 rounded">Manuales</a>
+    </nav>
+  </aside>
+  <div class="flex-1 md:ml-0">
+    <header class="bg-slate-800 text-white p-4">
+      <button class="md:hidden mr-3" (click)="mobileMenuOpen=!mobileMenuOpen">☰</button>
+      <div class="bg-orange-700 rounded-xl p-3 mb-3">
+        <p class="text-xs">PLENO SELECCIONADO</p>
+        <h1 class="text-2xl font-bold">{{ (ctx.activePleno$ | async)?.title || 'Sin pleno activo' }}</h1>
+      </div>
+      <div class="flex justify-between items-center">
+        <input class="rounded-md px-3 py-2 text-slate-900 w-64" placeholder="Introduce el término a buscar" />
+        <button class="bg-slate-600 px-4 py-2 rounded" (click)="logout()">Cerrar sesión</button>
+      </div>
+    </header>
+    <main class="p-4"><router-outlet /></main>
+  </div>
+</div>

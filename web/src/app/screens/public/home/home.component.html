@@ -1,0 +1,20 @@
+<section class="mx-auto max-w-7xl p-4 space-y-4">
+  <div class="rounded-2xl bg-slate-900 text-white p-6">
+    <h1 class="text-3xl font-bold mb-3">Plenos públicos</h1>
+    <div class="flex flex-col md:flex-row gap-3">
+      <input class="rounded-lg px-4 py-2 text-slate-900 w-full" placeholder="Buscar pleno" />
+      <select class="rounded-lg px-4 py-2 text-slate-900"><option>2026</option><option>2025</option></select>
+    </div>
+  </div>
+  <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    @for (pleno of (plenos$ | async); track pleno.id) {
+      <article class="bg-white rounded-xl shadow overflow-hidden">
+        <img [src]="pleno.imageUrl" [alt]="pleno.title" class="h-44 w-full object-cover">
+        <div class="p-4">
+          <h3 class="font-semibold">{{ pleno.title }}</h3>
+          <a [routerLink]="['/plenos', pleno.slug]" class="text-orange-600">Ver detalle</a>
+        </div>
+      </article>
+    }
+  </div>
+</section>

@@ -1,0 +1,8 @@
+<section class="mx-auto max-w-5xl p-4">
+  @if (pleno$ | async; as pleno) {
+    <article class="bg-white rounded-xl shadow overflow-hidden">
+      <img [src]="pleno.imageUrl" class="h-72 w-full object-cover" [alt]="pleno.title" />
+      <div class="p-6"><h1 class="text-3xl font-bold">{{ pleno.title }}</h1><p>{{ pleno.resumen }}</p></div>
+    </article>
+  } @else { <p>Pleno no encontrado</p> }
+</section>

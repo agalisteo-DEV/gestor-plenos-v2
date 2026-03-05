@@ -1,0 +1,1 @@
+{"ast":null,"code":"export var EstadoPleno = /*#__PURE__*/function (EstadoPleno) {\n  EstadoPleno[\"BORRADOR\"] = \"BORRADOR\";\n  EstadoPleno[\"PUBLICADO\"] = \"PUBLICADO\";\n  EstadoPleno[\"CERRADO\"] = \"CERRADO\";\n  return EstadoPleno;\n}(EstadoPleno || {});","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}
