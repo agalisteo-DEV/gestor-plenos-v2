@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Gestor Plenos v2
 
 ## Requisitos
@@ -21,3 +22,6 @@ npm start
 ## Documentación
 - `docs/MAPA_RUTAS.md`
 - `docs/GUIA_UI.md`
+=======
+# gestor-plenos-v2
+>>>>>>> 05832ce02d04abeab7960743d18fddbdb0b3c58b
