@@ -43,6 +43,7 @@ export class PrivateShellComponent {
     { initialValue: false }
   );
   protected readonly hasPlenos = computed(() => this.plenosUiState.hasPlenos() ?? this.repoHasPlenos());
+  private readonly activePleno = toSignal(this.ctx.activePleno$, { initialValue: null });
 
   protected readonly mainNavigation: readonly ShellNavItem[] = [
     { labelKey: 'private.nav.plenos', icon: 'event_note', link: '/app/plenos', exact: false }
@@ -123,6 +124,7 @@ export class PrivateShellComponent {
   protected get breadcrumb(): string {
     // Dependencia explícita para refrescar al cambiar idioma.
     this.i18n.currentLanguage();
+    const activePleno = this.activePleno();
     const normalizedUrl = this.router.url.split('?')[0];
     if (!normalizedUrl.startsWith('/app')) {
       return this.i18n.t('private.breadcrumb.dashboard');
@@ -131,6 +133,13 @@ export class PrivateShellComponent {
     const translatedParts = parts.map((part, index) => {
       if (index === 0) {
         return this.i18n.t('private.breadcrumb.dashboard');
+      }
+      const isPlenoIdSegment = index === 2 && parts[1] === 'plenos' && part !== 'new';
+      if (isPlenoIdSegment) {
+        if (activePleno?.id === part) {
+          return activePleno.title;
+        }
+        return this.i18n.t('private.screen.plenoDetail');
       }
       const key = this.breadcrumbSegmentKeys[part];
       return key ? this.i18n.t(key) : part;

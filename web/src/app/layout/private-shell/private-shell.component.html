@@ -148,27 +148,9 @@
             <p class="text-xs text-slate-500">{{ i18n.t('private.connectedUser') }}</p>
             <p class="text-sm font-medium text-slate-800">{{ signedUser }}</p>
           </div>
-        </div>
-      </div>
-
-      <div class="grid gap-3 lg:grid-cols-[1fr_auto]">
-        <div class="selected-pleno-panel rounded-xl px-4 py-3 text-slate-50">
-          <p class="text-xs uppercase tracking-[0.14em] text-slate-200">{{ i18n.t('private.selectedPleno') }}</p>
-          <p class="mt-1 text-lg font-semibold">{{ (ctx.activePleno$ | async)?.title || i18n.t('private.noSelectedPleno') }}</p>
-        </div>
-
-        <div class="flex flex-wrap items-center justify-end gap-2">
-          <label class="search-box flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
-            <input
-              class="w-48 text-sm text-slate-700 outline-none md:w-60"
-              [placeholder]="i18n.t('private.searchPlaceholder')"
-              [value]="plenosSearch.query()"
-              (input)="onSearchInput($event)"
-            />
-          </label>
           <button
             type="button"
-            class="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+            class="inline-flex items-center rounded-lg bg-slate-800 px-3 py-2 text-sm font-medium text-white hover:bg-slate-700"
             (click)="logout()"
             aria-label="Cerrar sesión"
             title="Cerrar sesión"
@@ -201,6 +183,24 @@
             </svg>
             <span class="sr-only">{{ i18n.t('private.logout') }}</span>
           </button>
+        </div>
+      </div>
+
+      <div class="grid gap-3 lg:grid-cols-[1fr_auto]">
+        <div class="selected-pleno-panel rounded-xl px-4 py-3 text-slate-50">
+          <p class="text-xs uppercase tracking-[0.14em] text-slate-200">{{ i18n.t('private.selectedPleno') }}</p>
+          <p class="mt-1 text-lg font-semibold">{{ (ctx.activePleno$ | async)?.title || i18n.t('private.noSelectedPleno') }}</p>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-end gap-2">
+          <label class="search-box flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
+            <input
+              class="w-48 text-sm text-slate-700 outline-none md:w-60"
+              [placeholder]="i18n.t('private.searchPlaceholder')"
+              [value]="plenosSearch.query()"
+              (input)="onSearchInput($event)"
+            />
+          </label>
         </div>
       </div>
     </header>
