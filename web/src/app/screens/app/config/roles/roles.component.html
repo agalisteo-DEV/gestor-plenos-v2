@@ -1,0 +1,76 @@
+<section class="space-y-5">
+  <header class="roles-header rounded-2xl px-5 py-5 text-slate-50 shadow-lg">
+    <p class="text-xs uppercase tracking-[0.16em] text-slate-200">Configuración</p>
+    <h2 class="mt-2 text-2xl font-semibold">Roles y permisos</h2>
+    <p class="mt-2 text-sm text-slate-200/90">
+      Gestiona tipos de usuario y define el alcance de visualización y acciones CRUD por módulo.
+    </p>
+  </header>
+
+  <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div class="mb-4 flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-slate-900">Roles definidos</h3>
+      <button type="button" class="rounded-lg bg-[#254b5e] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2f6178]">
+        Crear rol
+      </button>
+    </div>
+
+    <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+      @for (role of roles; track role.name) {
+        <article class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ role.name }}</p>
+          <p class="mt-2 text-2xl font-bold text-[#254b5e]">{{ role.users }}</p>
+          <p class="mt-1 text-xs text-slate-500">usuarios asignados</p>
+          <p class="mt-3 text-sm text-slate-700">{{ role.description }}</p>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div class="mb-3">
+      <h3 class="text-lg font-semibold text-slate-900">Matriz de permisos (vista previa)</h3>
+      <p class="text-sm text-slate-600">Esta base se usará para controlar acceso a pantallas y acciones por rol.</p>
+    </div>
+    <div class="overflow-x-auto rounded-xl border border-slate-200">
+      <table class="min-w-full divide-y divide-slate-200 text-sm">
+        <thead class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
+          <tr>
+            <th class="px-4 py-3">Módulo</th>
+            <th class="px-4 py-3">Ver</th>
+            <th class="px-4 py-3">Crear</th>
+            <th class="px-4 py-3">Editar</th>
+            <th class="px-4 py-3">Eliminar</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          @for (item of permissionsPreview; track item.module) {
+            <tr>
+              <td class="px-4 py-3 font-medium text-slate-900">{{ item.module }}</td>
+              <td class="px-4 py-3">
+                <span class="permission-chip" [class.permission-chip--ok]="item.view" [class.permission-chip--ko]="!item.view">
+                  {{ item.view ? 'Sí' : 'No' }}
+                </span>
+              </td>
+              <td class="px-4 py-3">
+                <span class="permission-chip" [class.permission-chip--ok]="item.create" [class.permission-chip--ko]="!item.create">
+                  {{ item.create ? 'Sí' : 'No' }}
+                </span>
+              </td>
+              <td class="px-4 py-3">
+                <span class="permission-chip" [class.permission-chip--ok]="item.update" [class.permission-chip--ko]="!item.update">
+                  {{ item.update ? 'Sí' : 'No' }}
+                </span>
+              </td>
+              <td class="px-4 py-3">
+                <span class="permission-chip" [class.permission-chip--ok]="item.remove" [class.permission-chip--ko]="!item.remove">
+                  {{ item.remove ? 'Sí' : 'No' }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</section>

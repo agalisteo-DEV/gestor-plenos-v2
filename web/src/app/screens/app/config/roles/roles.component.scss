@@ -1,0 +1,30 @@
+:host {
+  display: block;
+}
+
+.roles-header {
+  background:
+    radial-gradient(circle at 12% 14%, rgba(56, 189, 248, 0.24), transparent 42%),
+    linear-gradient(140deg, #254b5e 0%, #2f6178 55%, #1d4f66 100%);
+}
+
+.permission-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  border-radius: 999px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.permission-chip--ok {
+  color: #166534;
+  background-color: #dcfce7;
+}
+
+.permission-chip--ko {
+  color: #9f1239;
+  background-color: #ffe4e6;
+}

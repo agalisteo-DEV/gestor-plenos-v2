@@ -18,7 +18,8 @@ export const routes: Routes = [
     component: PrivateShellComponent,
     canActivate: [authGuard],
     children: [
-      { path: '', loadComponent: () => import('./screens/app/dashboard-home/dashboard-home.component').then(m => m.DashboardHomeComponent) },
+      { path: '', loadComponent: () => import('./screens/app/plenos/plenos-grid/plenos-grid.component').then(m => m.PlenosGridComponent) },
+      { path: 'dashboard', loadComponent: () => import('./screens/app/dashboard-home/dashboard-home.component').then(m => m.DashboardHomeComponent) },
       { path: 'plenos', loadComponent: () => import('./screens/app/plenos/plenos-grid/plenos-grid.component').then(m => m.PlenosGridComponent) },
       { path: 'plenos/new', loadComponent: () => import('./screens/app/plenos/pleno-form/pleno-form.component').then(m => m.PlenoFormComponent) },
       { path: 'plenos/:id', loadComponent: () => import('./screens/app/plenos/pleno-overview/pleno-overview.component').then(m => m.PlenoOverviewComponent) },
@@ -31,6 +32,7 @@ export const routes: Routes = [
       { path: 'plenos/:id/acta', loadComponent: () => import('./screens/app/plenos/acta/acta.component').then(m => m.ActaComponent) },
       { path: 'config/ayuntamiento', loadComponent: () => import('./screens/app/config/ayuntamiento/ayuntamiento.component').then(m => m.AyuntamientoComponent) },
       { path: 'config/usuarios', loadComponent: () => import('./screens/app/config/usuarios/usuarios.component').then(m => m.UsuariosComponent) },
+      { path: 'config/roles', loadComponent: () => import('./screens/app/config/roles/roles.component').then(m => m.RolesComponent) },
       { path: 'config/corporacion', loadComponent: () => import('./screens/app/config/corporacion/corporacion.component').then(m => m.CorporacionComponent) },
       { path: 'config/partidos', loadComponent: () => import('./screens/app/config/partidos/partidos.component').then(m => m.PartidosComponent) },
       { path: 'config/canales', loadComponent: () => import('./screens/app/config/canales/canales.component').then(m => m.CanalesComponent) },

@@ -1,1 +1,109 @@
-:host{display:block;}
+:host {
+  display: block;
+}
+
+.private-sidebar {
+  background:
+    radial-gradient(circle at 15% 18%, rgba(56, 189, 248, 0.18), transparent 42%),
+    radial-gradient(circle at 75% 12%, rgba(37, 99, 235, 0.2), transparent 44%),
+    linear-gradient(165deg, #0f172a 0%, #1e293b 52%, #1d4f66 100%);
+  box-shadow: 14px 0 36px rgba(2, 6, 23, 0.28);
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 0.72rem;
+  padding: 0.34rem 0.42rem;
+  font-size: 0.88rem;
+  color: #e2e8f0;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.sidebar-link mat-icon {
+  display: none;
+}
+
+.sidebar-link:hover {
+  background-color: rgba(148, 163, 184, 0.18);
+  color: #f8fafc;
+  transform: translateX(1px);
+}
+
+.sidebar-link--active {
+  background: linear-gradient(135deg, rgba(37, 75, 94, 0.86) 0%, rgba(47, 97, 120, 0.86) 100%);
+  color: #f8fafc;
+}
+
+.sidebar-link--help {
+  border: 1px solid rgba(125, 211, 252, 0.28);
+  background: rgba(15, 23, 42, 0.24);
+}
+
+.manuales-icon {
+  width: 1rem;
+  height: 1rem;
+  color: #bae6fd;
+}
+
+.sidebar-divider {
+  margin: 1.1rem 0;
+  border-top: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.sidebar-section {
+  padding-bottom: 0.35rem;
+}
+
+.sidebar-divider + .sidebar-section {
+  padding-top: 0.45rem;
+}
+
+.private-topbar {
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+}
+
+.selected-pleno-panel {
+  background: linear-gradient(135deg, #254b5e 0%, #2f6178 100%);
+  box-shadow: 0 8px 16px rgba(37, 75, 94, 0.22);
+}
+
+.search-box:focus-within {
+  border-color: #2f6178;
+  box-shadow: 0 0 0 3px rgba(47, 97, 120, 0.14);
+}
+
+.private-logo {
+  width: min(100%, 220px);
+  height: auto;
+  object-fit: contain;
+}
+
+.lang-flag-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.lang-flag-btn:hover {
+  transform: translateY(-1px);
+}
+
+.lang-flag-btn--active {
+  border-color: rgba(37, 75, 94, 0.42);
+  box-shadow: 0 0 0 2px rgba(37, 75, 94, 0.14);
+}
+
+.lang-flag-image {
+  width: 1.28rem;
+  height: 1.28rem;
+  border-radius: 999px;
+  object-fit: cover;
+}

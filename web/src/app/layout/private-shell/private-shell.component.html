@@ -1,45 +1,212 @@
-<div class="min-h-screen bg-slate-100 flex">
-  <aside [ngClass]="mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'" class="fixed md:static z-20 w-72 bg-slate-900 text-slate-100 min-h-screen p-4 transition-transform">
-    <h2 class="text-xl font-bold">Ayuntamiento</h2>
-    <p class="text-slate-300 mb-4">Torrejón de Velasco</p>
-    <nav class="space-y-2 text-sm">
-      <a routerLink="/app/plenos" class="block p-2 rounded hover:bg-slate-800">Plenos</a>
-      <p class="text-xs uppercase text-orange-300 mt-4">Control del pleno seleccionado</p>
-      @if (ctx.activePleno$ | async; as active) {
-        <a [routerLink]="['/app/plenos', active.id]" class="block p-2 hover:bg-slate-800 rounded">Vista general</a>
-        <a [routerLink]="['/app/plenos', active.id, 'documentos']" class="block p-2 hover:bg-slate-800 rounded">Documentos</a>
-        <a [routerLink]="['/app/plenos', active.id, 'agenda']" class="block p-2 hover:bg-slate-800 rounded">Orden del día</a>
-        <a [routerLink]="['/app/plenos', active.id, 'asistentes']" class="block p-2 hover:bg-slate-800 rounded">Asistentes</a>
-        <a [routerLink]="['/app/plenos', active.id, 'video']" class="block p-2 hover:bg-slate-800 rounded">Video</a>
-        <a [routerLink]="['/app/plenos', active.id, 'autocues']" class="block p-2 hover:bg-slate-800 rounded">Autocues</a>
-        <a [routerLink]="['/app/plenos', active.id, 'transcripcion']" class="block p-2 hover:bg-slate-800 rounded">Transcripción</a>
-        <a [routerLink]="['/app/plenos', active.id, 'acta']" class="block p-2 hover:bg-slate-800 rounded">Acta</a>
-        <a [routerLink]="['/plenos', active.slug]" class="block p-2 hover:bg-slate-800 rounded">Ver publicación</a>
-      } @else {
-        <p class="p-2 bg-slate-800 rounded text-slate-300">Selecciona un pleno</p>
+<div class="private-layout min-h-screen bg-slate-100">
+  @if (mobileMenuOpen) {
+    <button class="mobile-overlay fixed inset-0 z-30 bg-slate-950/50 md:hidden" (click)="closeMobileSidebar()"></button>
+  }
+
+  <aside
+    [ngClass]="mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'"
+    class="private-sidebar fixed left-0 top-0 z-40 h-screen w-[18.75rem] overflow-y-auto p-5 text-slate-100 transition-transform md:translate-x-0"
+  >
+    <header class="mb-6 border-b border-slate-700/70 pb-4">
+      <p class="text-xs uppercase tracking-[0.18em] text-sky-200">{{ i18n.t('private.panel') }}</p>
+      <a routerLink="/app/plenos" (click)="closeMobileSidebar()" class="inline-block mt-2">
+        <img src="assets/images/logo-dashboard-blanco.webp" alt="Gestor Plenos" class="private-logo" />
+      </a>
+      <p class="mt-1 text-sm text-slate-300">{{ townHallName }}</p>
+    </header>
+
+    <nav class="space-y-0">
+      <section class="sidebar-section">
+        <p class="mb-2 text-xs uppercase tracking-[0.16em] text-sky-200/80">{{ i18n.t('private.section.navigation') }}</p>
+        <div class="space-y-0.5">
+          @for (item of mainNavigation; track item.link) {
+            <a
+              [routerLink]="item.link"
+              [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+              routerLinkActive="sidebar-link--active"
+              class="sidebar-link"
+              (click)="closeMobileSidebar()"
+            >
+              <mat-icon aria-hidden="true">{{ item.icon }}</mat-icon>
+              <span>{{ i18n.t(item.labelKey) }}</span>
+            </a>
+          }
+        </div>
+      </section>
+      <div class="sidebar-divider"></div>
+
+      @if (hasPlenos()) {
+        <section class="sidebar-section">
+          <p class="mb-2 text-xs uppercase tracking-[0.16em] text-amber-200/80">{{ i18n.t('private.section.selectedPleno') }}</p>
+          @if (ctx.activePleno$ | async; as active) {
+            <div class="space-y-0.5">
+              @for (item of selectedPlenoNavigation; track item.link) {
+                @if (item.link === 'publicacion') {
+                  <a
+                    [routerLink]="['/plenos', active.slug]"
+                    class="sidebar-link"
+                    (click)="closeMobileSidebar()"
+                  >
+                    <mat-icon aria-hidden="true">{{ item.icon }}</mat-icon>
+                    <span>{{ i18n.t(item.labelKey) }}</span>
+                  </a>
+                } @else {
+                  <a
+                    [routerLink]="getPlenoRoute(active.id, item)"
+                    routerLinkActive="sidebar-link--active"
+                    class="sidebar-link"
+                    (click)="closeMobileSidebar()"
+                  >
+                    <mat-icon aria-hidden="true">{{ item.icon }}</mat-icon>
+                    <span>{{ i18n.t(item.labelKey) }}</span>
+                  </a>
+                }
+              }
+            </div>
+          } @else {
+            <p class="rounded-lg border border-slate-700 bg-slate-800/80 p-3 text-sm text-slate-300">
+              {{ i18n.t('private.selectPlenoToEdit') }}
+            </p>
+          }
+        </section>
+        <div class="sidebar-divider"></div>
       }
-      <p class="text-xs uppercase text-emerald-300 mt-4">Configuración</p>
-      <a routerLink="/app/config/ayuntamiento" class="block p-2 hover:bg-slate-800 rounded">Ayuntamiento</a>
-      <a routerLink="/app/config/usuarios" class="block p-2 hover:bg-slate-800 rounded">Usuarios</a>
-      <a routerLink="/app/config/corporacion" class="block p-2 hover:bg-slate-800 rounded">Corporación</a>
-      <a routerLink="/app/config/partidos" class="block p-2 hover:bg-slate-800 rounded">Partidos</a>
-      <a routerLink="/app/config/canales" class="block p-2 hover:bg-slate-800 rounded">Canales</a>
-      <a routerLink="/app/config/media" class="block p-2 hover:bg-slate-800 rounded">Media</a>
-      <a routerLink="/app/config/manuales" class="block p-2 hover:bg-slate-800 rounded">Manuales</a>
+
+      <section class="sidebar-section">
+        <p class="mb-2 text-xs uppercase tracking-[0.16em] text-emerald-200/80">{{ i18n.t('private.section.configuration') }}</p>
+        <div class="space-y-0.5">
+          @for (item of configNavigation; track item.link) {
+            @if (item.link !== '/app/config/manuales') {
+              <a
+                [routerLink]="item.link"
+                [routerLinkActiveOptions]="{ exact: true }"
+                routerLinkActive="sidebar-link--active"
+                class="sidebar-link"
+                (click)="closeMobileSidebar()"
+              >
+                <mat-icon aria-hidden="true">{{ item.icon }}</mat-icon>
+                <span>{{ i18n.t(item.labelKey) }}</span>
+              </a>
+            }
+          }
+        </div>
+      </section>
+      <div class="sidebar-divider"></div>
+
+      <section class="sidebar-section">
+        <a
+          routerLink="/app/config/manuales"
+          routerLinkActive="sidebar-link--active"
+          class="sidebar-link sidebar-link--help"
+          (click)="closeMobileSidebar()"
+        >
+          <svg class="manuales-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 18.5a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13Z" stroke="currentColor" stroke-width="1.8" />
+            <path d="M9.8 9.7a2.4 2.4 0 1 1 4.1 1.7c-.8.8-1.6 1.3-1.6 2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            <circle cx="12" cy="15.9" r="0.8" fill="currentColor" />
+          </svg>
+          <span>{{ i18n.t('private.nav.helpManuals') }}</span>
+        </a>
+      </section>
     </nav>
   </aside>
-  <div class="flex-1 md:ml-0">
-    <header class="bg-slate-800 text-white p-4">
-      <button class="md:hidden mr-3" (click)="mobileMenuOpen=!mobileMenuOpen">☰</button>
-      <div class="bg-orange-700 rounded-xl p-3 mb-3">
-        <p class="text-xs">PLENO SELECCIONADO</p>
-        <h1 class="text-2xl font-bold">{{ (ctx.activePleno$ | async)?.title || 'Sin pleno activo' }}</h1>
+
+  <div class="md:pl-[18.75rem]">
+    <header class="private-topbar sticky top-0 z-20 border-b border-slate-200 bg-white/95 px-4 py-4 backdrop-blur md:px-6">
+      <div class="mb-4 flex items-start justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-300 text-slate-700 md:hidden"
+            (click)="mobileMenuOpen = true"
+            aria-label="Abrir menú"
+          >
+            <mat-icon>menu</mat-icon>
+          </button>
+          <div>
+            <p class="text-xs uppercase tracking-[0.16em] text-slate-500">{{ breadcrumb }}</p>
+            <h2 class="text-xl font-semibold text-[#254b5e]">{{ screenTitle }}</h2>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+          <div class="flex items-center gap-1">
+            @for (language of i18n.enabledLanguages(); track language.code) {
+              <button
+                type="button"
+                class="lang-flag-btn"
+                [class.lang-flag-btn--active]="i18n.currentLanguage() === language.code"
+                [attr.aria-label]="i18n.t(language.labelKey)"
+                [title]="i18n.t(language.labelKey)"
+                (click)="setLanguage(language.code)"
+              >
+                <img [src]="language.flagPath" [alt]="i18n.t(language.labelKey)" class="lang-flag-image" />
+              </button>
+            }
+          </div>
+          <div class="border-l border-slate-200 pl-3">
+            <p class="text-xs text-slate-500">{{ i18n.t('private.connectedUser') }}</p>
+            <p class="text-sm font-medium text-slate-800">{{ signedUser }}</p>
+          </div>
+        </div>
       </div>
-      <div class="flex justify-between items-center">
-        <input class="rounded-md px-3 py-2 text-slate-900 w-64" placeholder="Introduce el término a buscar" />
-        <button class="bg-slate-600 px-4 py-2 rounded" (click)="logout()">Cerrar sesión</button>
+
+      <div class="grid gap-3 lg:grid-cols-[1fr_auto]">
+        <div class="selected-pleno-panel rounded-xl px-4 py-3 text-slate-50">
+          <p class="text-xs uppercase tracking-[0.14em] text-slate-200">{{ i18n.t('private.selectedPleno') }}</p>
+          <p class="mt-1 text-lg font-semibold">{{ (ctx.activePleno$ | async)?.title || i18n.t('private.noSelectedPleno') }}</p>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-end gap-2">
+          <label class="search-box flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
+            <input
+              class="w-48 text-sm text-slate-700 outline-none md:w-60"
+              [placeholder]="i18n.t('private.searchPlaceholder')"
+              [value]="plenosSearch.query()"
+              (input)="onSearchInput($event)"
+            />
+          </label>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+            (click)="logout()"
+            aria-label="Cerrar sesión"
+            title="Cerrar sesión"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+              <path
+                d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M14 16l4-4-4-4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M18 12H9"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <span class="sr-only">{{ i18n.t('private.logout') }}</span>
+          </button>
+        </div>
       </div>
     </header>
-    <main class="p-4"><router-outlet /></main>
+
+    <main class="px-4 py-5 md:px-6 md:py-6">
+      <router-outlet />
+    </main>
   </div>
 </div>
