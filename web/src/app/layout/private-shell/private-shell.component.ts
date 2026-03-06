@@ -1,15 +1,16 @@
 import { Component, computed, inject } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet, NavigationEnd } from '@angular/router';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
 import { PlenoContextService } from '../../core/services/pleno-context.service';
 import { MatIconModule } from '@angular/material/icon';
 import { AppLanguage, I18nService, TranslationKey } from '../../core/services/i18n.service';
 import { PlenoLocalRepository } from '../../data-access/pleno-local.repository';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
 import { PlenosSearchService } from '../../core/services/plenos-search.service';
 import { PlenosUiStateService } from '../../core/services/plenos-ui-state.service';
+import { filter } from 'rxjs';
 
 interface ShellNavItem {
   readonly labelKey: TranslationKey;
@@ -95,6 +96,16 @@ export class PrivateShellComponent {
     manuales: 'private.nav.manuales'
   };
 
+  constructor() {
+    this.updateSearchContext(this.router.url);
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed()
+      )
+      .subscribe((event) => this.updateSearchContext(event.urlAfterRedirects));
+  }
+
   protected get screenTitle(): string {
     // Dependencia explícita para refrescar al cambiar idioma.
     this.i18n.currentLanguage();
@@ -153,5 +164,40 @@ export class PrivateShellComponent {
   protected logout(): void {
     this.auth.logout();
     void this.router.navigateByUrl('/login');
+  }
+
+  private updateSearchContext(url: string): void {
+    const normalizedUrl = url.split('?')[0];
+    const segments = normalizedUrl.split('/').filter(Boolean);
+    let context = 'private-default';
+
+    if (normalizedUrl === '/app/plenos' || normalizedUrl === '/app/plenos/new') {
+      context = 'plenos';
+    } else if (normalizedUrl.startsWith('/app/plenos/')) {
+      const section = segments[3];
+      if (!section) {
+        context = 'pleno-overview';
+      } else if (section === 'documentos') {
+        context = 'pleno-documentos';
+      } else if (section === 'agenda') {
+        context = 'pleno-agenda';
+      } else if (section === 'asistentes') {
+        context = 'pleno-asistentes';
+      } else if (section === 'video') {
+        context = 'pleno-video';
+      } else if (section === 'autocues') {
+        context = 'pleno-autocues';
+      } else if (section === 'transcripcion') {
+        context = 'pleno-transcripcion';
+      } else if (section === 'acta') {
+        context = 'pleno-acta';
+      } else {
+        context = 'pleno-detail';
+      }
+    } else if (normalizedUrl.startsWith('/app/config/')) {
+      context = `config-${segments[2] ?? 'default'}`;
+    }
+
+    this.plenosSearch.setContext(context);
   }
 }
