@@ -1,9 +1,141 @@
-<section class="min-h-screen grid place-items-center bg-slate-100 p-4">
-  <form class="bg-white rounded-2xl shadow p-6 w-full max-w-md space-y-3" (ngSubmit)="submit()">
-    <h1 class="text-2xl font-bold">Iniciar sesión</h1>
-    <input [(ngModel)]="username" name="username" class="w-full border rounded p-2" />
-    <input [(ngModel)]="password" name="password" type="password" class="w-full border rounded p-2" />
-    <button class="w-full bg-orange-600 text-white rounded p-2" type="submit">Entrar</button>
-    @if (error) { <p class="text-red-600">{{ error }}</p> }
-  </form>
+<section class="login-screen min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+  <div class="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-xl items-center justify-center">
+    <form
+      class="login-card w-full rounded-3xl p-6 shadow-2xl sm:p-8"
+      (ngSubmit)="submit()"
+      autocomplete="on"
+    >
+      <div class="mb-6 flex flex-wrap justify-center gap-2">
+        @for (language of languageOptions; track language.code) {
+          <button
+            type="button"
+            class="lang-chip rounded-full px-2 py-1 text-xs font-medium"
+            [class.lang-chip--active]="i18n.currentLanguage() === language.code"
+            (click)="setLanguage(language.code)"
+            [attr.aria-label]="i18n.t(language.labelKey)"
+          >
+            <img class="lang-chip__flag" [src]="language.flagPath" [alt]="i18n.t(language.labelKey)" />
+          </button>
+        }
+      </div>
+
+      <div class="mb-8 text-center">
+        <img [src]="logoPath" alt="Logotipo Gestor Plenos" class="login-logo mx-auto mb-4" />
+        <h1 class="mt-2 text-2xl font-semibold text-[#254b5e] sm:text-3xl">{{ i18n.t('login.title') }}</h1>
+        <p class="mt-2 text-sm text-slate-600">
+          {{ i18n.t('login.subtitle') }}
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        <mat-form-field
+          appearance="outline"
+          floatLabel="always"
+          class="w-full login-form-field login-form-field--password"
+        >
+          <mat-label>{{ i18n.t('login.username.label') }}</mat-label>
+          <input
+            matInput
+            [(ngModel)]="username"
+            name="username"
+            autocomplete="username"
+            [placeholder]="i18n.t('login.username.placeholder')"
+            required
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" floatLabel="always" class="w-full login-form-field">
+          <mat-label>{{ i18n.t('login.password.label') }}</mat-label>
+          <input
+            matInput
+            [(ngModel)]="password"
+            name="password"
+            [type]="hidePassword ? 'password' : 'text'"
+            autocomplete="current-password"
+            required
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="hidePassword ? i18n.t('login.password.show') : i18n.t('login.password.hide')"
+            [attr.aria-pressed]="!hidePassword"
+          >
+            @if (hidePassword) {
+              <svg
+                class="eye-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  d="M2 12C3.9 7.9 7.6 5.5 12 5.5C16.4 5.5 20.1 7.9 22 12C20.1 16.1 16.4 18.5 12 18.5C7.6 18.5 3.9 16.1 2 12Z"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.8" />
+              </svg>
+            } @else {
+              <svg
+                class="eye-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  d="M3 3L21 21"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M10.6 6C11.1 5.8 11.5 5.8 12 5.8C16.2 5.8 19.8 8.1 21.7 12C21 13.5 20 14.8 18.9 15.8"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M14.1 14.2C13.6 14.7 12.8 15 12 15C10.3 15 9 13.7 9 12C9 11.2 9.3 10.4 9.9 9.9"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M6.1 8.3C4.9 9.3 3.9 10.5 3.2 12C5.1 15.9 8.8 18.2 13 18.2C13.5 18.2 13.9 18.2 14.3 18.1"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            }
+          </button>
+        </mat-form-field>
+      </div>
+
+      <div class="mt-2 text-right">
+        <a href="#" class="recover-link text-sm" (click)="$event.preventDefault()">
+          {{ i18n.t('login.recover') }}
+        </a>
+      </div>
+
+      <button mat-flat-button class="mt-6 login-submit h-11 px-6" type="submit">
+        {{ i18n.t('login.submit') }}
+      </button>
+
+      @if (errorKey) {
+        <p class="mt-4 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+          {{ i18n.t(errorKey) }}
+        </p>
+      }
+    </form>
+  </div>
 </section>

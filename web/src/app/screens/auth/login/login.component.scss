@@ -1,1 +1,108 @@
-:host{display:block;}
+:host {
+  display: block;
+}
+
+.login-screen {
+  background:
+    radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.22), transparent 42%),
+    radial-gradient(circle at 85% 20%, rgba(14, 116, 144, 0.2), transparent 45%),
+    linear-gradient(155deg, rgba(2, 6, 23, 0.96) 0%, rgba(15, 23, 42, 0.94) 45%, rgba(30, 58, 138, 0.9) 100%);
+}
+
+.login-card {
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+}
+
+.lang-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(37, 75, 94, 0.22);
+  color: #254b5e;
+  background-color: rgba(255, 255, 255, 0.86);
+  transition: all 0.2s ease;
+  line-height: 1;
+  width: 34px;
+  height: 34px;
+  padding: 0 !important;
+
+  &:hover {
+    background-color: rgba(37, 75, 94, 0.08);
+  }
+}
+
+.lang-chip__flag {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+
+.lang-chip--active {
+  border-color: rgba(37, 75, 94, 0.45);
+  color: #f8fafc;
+  background: linear-gradient(135deg, #254b5e 0%, #2f6178 100%);
+}
+
+.login-logo {
+  width: min(100%, 320px);
+  max-width: 320px;
+  height: auto;
+  max-height: 72px;
+  object-fit: contain;
+  object-position: center;
+}
+
+.eye-icon {
+  width: 20px;
+  height: 20px;
+  color: #475569;
+}
+
+.login-submit {
+  display: block;
+  margin-inline: auto;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-radius: 10px;
+  color: #f8fafc !important;
+  background: linear-gradient(135deg, #254b5e 0%, #2f6178 100%);
+  box-shadow: 0 10px 18px rgba(37, 75, 94, 0.28);
+  transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+
+  &:hover {
+    background: linear-gradient(135deg, #2f6178 0%, #3a7690 100%);
+    box-shadow: 0 12px 22px rgba(47, 97, 120, 0.34);
+    transform: translateY(-1px);
+  }
+}
+
+.recover-link {
+  color: #334155;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #0f172a;
+    text-decoration: underline;
+  }
+}
+
+:host ::ng-deep .login-form-field .mdc-text-field__input {
+  padding-left: 12px !important;
+  font-family: 'Manrope', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 1rem;
+}
+
+
+:host ::ng-deep .login-form-field .mdc-floating-label,
+:host ::ng-deep .login-form-field .mat-mdc-form-field-infix {
+  font-family: 'Manrope', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+
+:host ::ng-deep .login-form-field .mdc-floating-label {
+  font-size: 1rem !important;
+  line-height: 1.2;
+}
