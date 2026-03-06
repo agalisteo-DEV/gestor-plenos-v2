@@ -8,7 +8,8 @@ type AuthMode = 'mock' | 'firebase';
 export class AuthService {
   // Servicio preparado para alternar entre acceso de pruebas (mock) y Firebase Auth.
   private readonly key = 'gpv2_auth';
-  private readonly state = new BehaviorSubject<boolean>(localStorage.getItem(this.key) === '1');
+  private readonly storage = sessionStorage;
+  private readonly state = new BehaviorSubject<boolean>(this.storage.getItem(this.key) === '1');
   private readonly authMode: AuthMode = (environment as { authMode?: AuthMode }).authMode ?? 'mock';
 
   readonly authState$ = this.state.asObservable();
@@ -19,13 +20,13 @@ export class AuthService {
       : this.mockLogin(user, pass);
 
     if (ok) {
-      localStorage.setItem(this.key, '1');
+      this.storage.setItem(this.key, '1');
       this.state.next(true);
     }
     return ok;
   }
 
-  logout(): void { localStorage.removeItem(this.key); this.state.next(false); }
+  logout(): void { this.storage.removeItem(this.key); this.state.next(false); }
   get isAuthenticated(): boolean { return this.state.value; }
 
   private mockLogin(user: string, pass: string): boolean {
